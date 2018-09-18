@@ -26,7 +26,7 @@
                   <view class="counts">{{item.counts}}</view>
                   <view class="btns" bindtap='changeCounts' data-id="{{item.id}}" data-type="add">+</view>
                 </view>
-                <view class="delete" data-id="{{item.id}}">×</view>
+                <view class="delete" data-id="{{item.id}}" bindtap='delete'>×</view>
               </view>
             </view>
           </view>

@@ -90,5 +90,21 @@ class Cart extends Base{
     this._changeCounts(id,-1)
   }
 
+  delete(ids){
+    if (!(ids instanceof Array)){
+      ids = [ids];
+    }
+    var cartData = this.getCartDataFromLocal()
+    for(var i=1;i<ids.length;i++){
+      var hasInfo = this._isHasThatOne(ids[i],cartData)
+      if(hasInfo.index != -1){
+        cartData.splice(hasInfo.index,1)
+      }
+    }
+    // 更新本地缓存
+    wx.setStorageSync(this._storgeKeyName, cartData)
+
+  }
+
 }
 export{Cart}
