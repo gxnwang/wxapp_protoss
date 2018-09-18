@@ -45,6 +45,8 @@ class Cart extends Base{
     var res = wx.getStorageSync(this._storgeKeyName)
     return res?res:[]
   }
+
+
   /**
    * 判断某个商品是否已经被添加到购物车中，并且返回这个商品的数据以及所在数组的序号
    * @id 商品id号
@@ -66,5 +68,27 @@ class Cart extends Base{
     }
     return result
   }
+
+  _changeCounts(id,counts){
+    var cartData = this.getCartDataFromLocal(),
+        hasInfo  =this._isHasThatOne(id,cartData)
+    if(hasInfo.index != -1){
+      if(hasInfo.data.counts >1 ){
+        cartData[hasInfo.index].counts += counts
+      }
+
+    }
+    // 更新本地缓存
+    wx.setStorageSync(this._storgeKeyName, cartData)
+  }
+
+  addCounts(id){
+    this._changeCounts(id,1)
+  }
+
+  cutCounts(id){
+    this._changeCounts(id,-1)
+  }
+
 }
 export{Cart}

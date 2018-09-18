@@ -72,15 +72,6 @@ Page({
     }
 
   },
-  _resetCartData: function () {
-    var newData = this._calcTotalAccountAndCounts(this.data.cartData); /*重新计算总金额和商品总数*/
-    this.setData({
-      account: newData.account,
-      selectedCounts: newData.selectedCounts,
-      selectedTypeCounts: newData.selectedTypeCounts,
-      cartData: this.data.cartData
-    });
-  },
   toggleSelect: function(event){
     var id = cart.getDataSet(event,'id'),
         status = cart.getDataSet(event,'status'),
@@ -91,12 +82,27 @@ Page({
   
 
   },
+  _resetCartData: function () {
+    /** 重新计算总金额和商品总数 */
+    var newData = this._calcTotalAccountAndCounts(this.data.cartData)
+    this.setData({
+      account: newData.account,
+      selectedCounts: newData.selectedCounts,
+      selectedTypeCounts: newData.selectedTypeCounts,
+      cartData: this.data.cartData
+    });
+  },
   
 
   toggleSelectAll: function(event){
-    /** 重新计算总金额和商品总数 */
-    var newData = this._calcTotalAccountAndCounts(this.data.cartData)
+    var status = cart.getDataSet(event, 'status') == 'true'
 
+    var data = this.data.cartData,
+        len = data.length
+    for(let i=0;i<len;i++){
+      data[i].selectStatus = !status
+    }
+    this._resetCartData()
   },
 
   /** 根据商品id得到 商品所在的下标 */
@@ -109,7 +115,20 @@ Page({
       }
     }
   },
-
+  changeCounts: function(event){
+    var id = cart.getDataSet(event,'id'),
+        type = cart.getDataSet(event, 'type'),
+        index = this._getProductIndexById(id),
+        counts = 1
+    if(type == 'add'){
+      cart.addCounts(id)
+    }else{
+      counts = -1
+      cart.cutCounts(id)
+    }
+    this.data.cartData[index].counts += counts
+    this._resetCartData()
+  },
 
   /**
    * 生命周期函数--监听页面隐藏
