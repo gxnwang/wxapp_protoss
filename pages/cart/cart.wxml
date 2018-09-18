@@ -5,7 +5,8 @@
       <block wx:for="{{cartData}}" wx:key="{{item}}">
         <view class="cart-item">
           <view class="cart-item-main">
-            <view class="cart-item-checkbox">
+            <view class="cart-item-checkbox" ontap="toggleSelect" data-id="{{item.id}}" data-status="{{item.selectStatus}}">
+           
               <image wx:if="{{item.selectStatus}}" src="../../imgs/icon/circle@selected.png"></image>
               <image wx:else src="../../imgs/icon/circle@noselected.png"></image>
             </view>

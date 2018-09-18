@@ -55,10 +55,10 @@ Page({
         // 商品种类数量
         selectedTypeCounts = 0
     let multiple = 100
-
+    
     for(let i = 0; i<len;i++){
       // 避免 0.05+0.01=0.060 000 000 000 000 005 的问题，乘以100*100
-      if(data[i].selectedCounts){
+      if (data[i].selectStatus){
         account += data[i].counts * multiple * Number(data[i].price) *multiple
         selectedCounts += data[i].counts
         selectedTypeCounts++
@@ -71,6 +71,43 @@ Page({
       account: account / (multiple* multiple)
     }
 
+  },
+  _resetCartData: function () {
+    var newData = this._calcTotalAccountAndCounts(this.data.cartData); /*重新计算总金额和商品总数*/
+    this.setData({
+      account: newData.account,
+      selectedCounts: newData.selectedCounts,
+      selectedTypeCounts: newData.selectedTypeCounts,
+      cartData: this.data.cartData
+    });
+  },
+  toggleSelect: function(event){
+    var id = cart.getDataSet(event,'id'),
+        status = cart.getDataSet(event,'status'),
+        index = this._getProductIndexById(id)
+
+    this.data.cartData[index].selectStatus = !status
+    this._resetCartData()
+  
+
+  },
+  
+
+  toggleSelectAll: function(event){
+    /** 重新计算总金额和商品总数 */
+    var newData = this._calcTotalAccountAndCounts(this.data.cartData)
+
+  },
+
+  /** 根据商品id得到 商品所在的下标 */
+  _getProductIndexById: function(id){
+    var data = this.data.cartData,
+        len = data.length
+    for(let i=0;i<len;i++){
+      if(data[i].id == id){
+        return i
+      }
+    }
   },
 
 
