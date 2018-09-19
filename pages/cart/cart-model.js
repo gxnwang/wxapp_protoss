@@ -44,10 +44,24 @@ class Cart extends Base{
 
   /**
    * 从缓存中读取购物车数据
+   * @flag boolen 是否考虑商品选择状态
    */
-  getCartDataFromLocal(){
+  getCartDataFromLocal(flag){
     var res = wx.getStorageSync(this._storageKeyName)
-    return res?res:[]
+    if(!res){
+      res = []
+    }
+    if(flag){
+      var newRes = []
+      for(let i=0;i<res.length;i++){
+        if(res[i].selectStatus){
+          newRes.push(res[i])
+        }
+      }
+      res = newRes
+    }
+
+    return res
   }
 
 

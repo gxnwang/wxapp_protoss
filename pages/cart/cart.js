@@ -138,6 +138,11 @@ Page({
     this._resetCartData()
     cart.delete(id)
   },
+  submitOrder: function(event){
+    wx.navigateTo({
+      url: '../order/order?account='+ this.data.account + '&from=cart',
+    })
+  },
 
   /**
    * 生命周期函数--监听页面隐藏
