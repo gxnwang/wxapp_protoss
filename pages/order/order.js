@@ -33,7 +33,7 @@ Page({
         var addressInfo = {
           name: res.username,
           mobile: res.telNumber,
-          totalDetail: res.provinceName+res.cityName+res.countyName+res.detailInfo
+          totalDetail: res.provinceName + res.cityName + res.countyName + res.detailInfo
         }
       }
     })
