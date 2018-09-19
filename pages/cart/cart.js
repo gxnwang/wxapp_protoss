@@ -132,8 +132,10 @@ Page({
   delete: function(event){
     var id = cart.getDataSet(event,'id'),
         index = this._getProductIndexById(id)
+    
     this.data.cartData.splice(index,1)  // 删除某一项商品
-    this._resetCartData
+    
+    this._resetCartData()
     cart.delete(id)
   },
 
@@ -141,14 +143,14 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+    cart.execSetStorageSync(this.data.cartData)
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+    
   },
 
   /**

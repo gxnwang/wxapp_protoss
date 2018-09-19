@@ -2,7 +2,7 @@
 <view class="container detail-container">
   <view class="detail-header-box">
     <view class="fixed-btns-box">
-      <view class="fiexd-cart">
+      <view class="fiexd-cart" bindtap="onCartIconTap">
         <image src="../../imgs/icon/cart@top.png"></image>
         <view wx:if="{{cartTotalCounts>0}}">
           {{cartTotalCounts}}

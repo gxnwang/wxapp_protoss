@@ -2,7 +2,7 @@ import {Base} from '../../utils/base.js'
 class Cart extends Base{
   constructor(){
     super()
-    this._storgeKeyName = 'cart'
+    this._storageKeyName = 'cart'
   }
 
   add(item,counts){
@@ -15,7 +15,7 @@ class Cart extends Base{
     }else{
       cartData[isHasInfo.index].counts +=counts
     }
-    wx.setStorageSync(this._storgeKeyName, cartData)
+    wx.setStorageSync(this._storageKeyName, cartData)
   }
   /**
    * 获取购物车所有商品的数量总和
@@ -38,11 +38,15 @@ class Cart extends Base{
     return counts
   }
 
+  execSetStorageSync(data){
+    wx.setStorageSync(this._storageKeyName, data)
+  }
+
   /**
    * 从缓存中读取购物车数据
    */
   getCartDataFromLocal(){
-    var res = wx.getStorageSync(this._storgeKeyName)
+    var res = wx.getStorageSync(this._storageKeyName)
     return res?res:[]
   }
 
@@ -79,7 +83,7 @@ class Cart extends Base{
 
     }
     // 更新本地缓存
-    wx.setStorageSync(this._storgeKeyName, cartData)
+    wx.setStorageSync(this._storageKeyName, cartData)
   }
 
   addCounts(id){
@@ -95,14 +99,14 @@ class Cart extends Base{
       ids = [ids];
     }
     var cartData = this.getCartDataFromLocal()
-    for(var i=1;i<ids.length;i++){
+    for(var i=0;i<ids.length;i++){
       var hasInfo = this._isHasThatOne(ids[i],cartData)
       if(hasInfo.index != -1){
-        cartData.splice(hasInfo.index,1)
+        cartData.splice(hasInfo.index, 1)
       }
     }
     // 更新本地缓存
-    wx.setStorageSync(this._storgeKeyName, cartData)
+    wx.setStorageSync(this._storageKeyName, cartData)
 
   }
 
