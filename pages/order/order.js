@@ -1,7 +1,11 @@
 // pages/order/order.js
 import {Cart} from '../cart/cart-model.js'
+import {Order} from '../order/order-model.js'
+import {Address} from '../../utils/address.js'
 
 var cart = new Cart
+var order = new Order
+var address = new Address 
 
 Page({
 
@@ -26,16 +30,24 @@ Page({
     })
   },
   editAddress: function(event){
+    var that = this
     wx.chooseAddress({
       success: function (res){
         console.log(res)
         console.log(res.provinceName + res.cityName + res.countyName + res.detailInfo)
         var addressInfo = {
-          name: res.username,
+          name: res.userName,
           mobile: res.telNumber,
-          totalDetail: res.provinceName + res.cityName + res.countyName + res.detailInfo
+          totalDetail: address.setAddressInfo(res)
         }
+        that._bindAddressInfo(addressInfo)
       }
+    })
+  },
+  /** 绑定地址信息 */
+  _bindAddressInfo: function(addressInfo){
+    this.setData({
+      addressInfo: addressInfo
     })
   },
 
