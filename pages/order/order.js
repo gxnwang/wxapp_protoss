@@ -4,7 +4,6 @@ import {Order} from '../order/order-model.js'
 import {Address} from '../../utils/address.js'
 
 var cart = new Cart
-var order = new Order
 var address = new Address 
 
 Page({
@@ -82,6 +81,49 @@ Page({
     
     this.setData({
       addressInfo: addressInfo
+    })
+  },
+
+  pay: function(){
+    if(!this.data.addressInfo){
+      this.showTips('下单提示','请填写您的收货地址')
+      return
+    }
+    if(this.data.orderStatus == 0){
+      this._firstTimePay()  // 创建订单并支付
+    } else {
+      this._oneMoresTimePay()  // 订单创建后的支付
+    }
+  },
+
+  /** 第一次支付 */
+  _firstTimePay: function(){
+    var orderInfo = [],
+        productInfo = this.data.productsArr,
+        order = new Order
+    for (let i=0;i<productInfo.length;i++){
+      orderInfo.push({
+        product_id: productInfo[i].id,
+        count: productInfo[i].counts
+      })
+    }
+
+    var that = this
+    // 支付分两步，第一步是生成订单号，然后根据订单号支付
+    order.doOrder(orderInfo,(data)=>{
+      // 订单生成成功
+      if(data.pass) {
+        // 更新订单状态
+        var id = data.order_id
+        that.data.id = id
+        that.data.fromCartFlag = false
+
+        // 开始支付
+        that._execPay(id)
+      }else{
+        that._orderFial(data) // 下单失败
+      }
+
     })
   },
 
