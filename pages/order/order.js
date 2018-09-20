@@ -28,24 +28,58 @@ Page({
       account: options.account,
       orderStatus: 0
     })
+  
+    address.getAddress((res)=>{
+    
+      this._bindAddressInfo(res)
+     
+    })
+   
   },
   editAddress: function(event){
     var that = this
     wx.chooseAddress({
       success: function (res){
-        console.log(res)
-        console.log(res.provinceName + res.cityName + res.countyName + res.detailInfo)
         var addressInfo = {
           name: res.userName,
           mobile: res.telNumber,
           totalDetail: address.setAddressInfo(res)
         }
         that._bindAddressInfo(addressInfo)
+
+        address.submitAddress(res,(flag)=>{
+          if(!flag){
+            that.showTips('操作提示','地址信息更新失败！')
+          }
+        })
       }
     })
   },
+  /**
+   * 提示窗口
+   * @title {string} 标题
+   * @content {string} 内容
+   * @flag {bool} 是否跳转到“我的”页面 
+   * 
+   */
+  showTips: function(title,content,flag){
+    wx.showModal({
+      title: title,
+      content: content,
+      showCancel: false,
+      success: function(res){
+        if(flag){
+          wx.switchTab({
+            url: '/pages/my/my',
+          })
+        }
+      }
+    })
+  },
+
   /** 绑定地址信息 */
   _bindAddressInfo: function(addressInfo){
+    
     this.setData({
       addressInfo: addressInfo
     })
